@@ -1,0 +1,44 @@
+---
+import Header from "./Header.astro";
+import Footer from "./Footer.astro"
+import "../utils/global.scss";
+import "ress/ress.css";
+import { string } from "astro/zod";
+
+const defaultDescription: string = "Welcome to iGEM TokyoTech's Home Page!!";
+
+type LayoutProps = {
+    lang? : string;
+    pageTitle? : string;
+    description?: string;
+};
+
+const props: LayoutProps = Astro.props;
+---
+<html lang={ props.lang ? props.lang : "en" }>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <title>iGEM TokyoTech - iGEM TokyoTech</title>
+        <meta name="description" content={props.description ? props.description : defaultDescription}>
+        <meta name="author" content="iGEM TokyoTech">
+        <meta property="og:title" content="iGEM TokyoTech">
+        <meta name="og:description" content={props.description ? props.description : defaultDescription}>
+        <meta property="og:image" content="https://www.igemtokyotech.org/img/old-it2-logo-trp.png">
+        <meta property="og:url" content="https://www.igemtokyotech.org/">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="iGEM TokyoTech">
+        <meta name="twitter:title" content="iGEM TokyoTech">
+        <meta name="twitter:description" content={props.description ? props.description : defaultDescription}>
+        <meta name="twitter:image" content="https://www.igemtokyotech.org/img/old-it2-logo-trp.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@igem_tokyotech">
+        <meta name="twitter:creator" content="@igem_tokyotech">
+        <link href="https://www.igemtokyotech.org/img/it2-favicon.ico" rel="icon" type="image/x-icon">
+        <meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+    </head>
+    <Header />
+    <slot />
+    <Footer />
+</html>

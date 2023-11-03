@@ -1,0 +1,153 @@
+---
+const pageStruct: Array<{
+    pageTitle: string, 
+    src: string,
+    children?: Array<{
+    pageTitle: string, 
+    src: string,
+}>
+}> = 
+[
+    {
+        pageTitle: "Home",
+        src: "/"
+    },
+    {
+        pageTitle: "The Projects",
+        src: "",
+        children: [
+            {
+                pageTitle: "Current Project",
+                src: "current-project"
+            },
+            {
+                pageTitle: "All Projects",
+                src: "/all-projects"
+            },
+        ]
+    },
+    {
+        pageTitle: "The Teams",
+        src: "#",
+        children: [
+            {
+                pageTitle: "Join iGEM",
+                src: "join-igem"
+            },
+            {
+                pageTitle: "Current Team",
+                src: "/current-team"
+            },
+        ]
+    },
+    {
+        pageTitle: "Events",
+        src: "#",
+        children: [
+            {
+                pageTitle: "Blog",
+                src: "/blog"
+            },
+            {
+                pageTitle: "X",
+                src: "/twitter"
+            },
+            {
+                pageTitle: "Events",
+                src: "/events"
+            },
+        ]
+    },
+    {
+        pageTitle: "About iGEM",
+        src: "/about-igem"
+    }
+];
+---
+
+<style lang="scss">
+    .dropdown-button:hover {
+        background-color: gray;;
+    }
+
+    .dropdown-menu {
+        display: none;
+    }
+
+    .dropdown-menu.expanded {
+        display: unset;
+    }
+
+    .navigation-list {
+
+    }
+
+    
+</style>
+
+<script>
+    type ToggleDropdown = {
+        parent: HTMLElement;
+        children : {
+            menu: HTMLElement;
+            button: HTMLElement;
+        }
+    };
+    const init = () => {
+        const dropdowns = document.querySelectorAll(".dropdown")
+
+
+        const handlerGenerator = (menu: HTMLElement, button: HTMLElement): ((e: MouseEvent)=>void) => {
+            const handler = (e: MouseEvent) => {
+                if (button.contains(e.target as Node)) {
+                    menu.classList.toggle("expanded");
+                } else {
+                    menu.classList.remove("expanded")
+                }
+            };
+            return handler;
+        };
+
+        dropdowns.forEach((dropdown)=> {
+            const dropdownMenu: HTMLElement | null = dropdown.querySelector(".dropdown-menu");
+            const dropdownButton: HTMLElement | null  = dropdown.querySelector(".dropdown-button");
+            if (dropdownMenu === null || dropdownButton === null) {
+                return;
+            } else {
+                document.addEventListener("click",(e) => handlerGenerator(dropdownMenu, dropdownButton)(e))
+            }
+        });
+
+
+    };
+    document.addEventListener("DOMContentLoaded", init);
+</script>
+
+<nav>
+    <ul class="navigation-list">
+        {pageStruct.map((pageInfo)=>{
+            if (pageInfo.children === undefined) {
+                return (
+                    <li>
+                        <a href={pageInfo.src}>{pageInfo.pageTitle}</a>
+                    </li>
+                    );
+            } else {
+                return (
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-button">{pageInfo.pageTitle}</a>
+                        <ul class="dropdown-menu">
+                            {pageInfo.children.map((child)=>(
+                                <li>
+                                    <div>
+                                        <a href={child.src}>{child.pageTitle}</a>
+                                    </div>
+                                </li>
+                                ))}
+                        </ul>
+                    </li>
+                    );
+            }
+        })}
+    </ul>
+</nav>
